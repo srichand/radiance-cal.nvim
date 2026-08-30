@@ -1,0 +1,13 @@
+{
+	Outer comment { with a nested comment } still outer
+}
+
+FTINY : 1e-7;
+half : .5;
+one : 1.;
+fact(n) : if(n-1.5, n*fact(n-1), 1);
+d1(f,x) = (f(x+FTINY)-f(x-FTINY))/FTINY/2;
+local`context.value = sqrt(PI);
+`strict_local = noise3(Dx, NyP, Pz);
+$1 = in(2) * 4E+2;
+ro = ri(1) + gi(1) + bi(1);
