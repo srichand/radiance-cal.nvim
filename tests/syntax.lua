@@ -16,16 +16,6 @@ local function group_at(line, text)
 	return vim.fn.synIDattr(vim.fn.synID(line, column, true), "name")
 end
 
-local function resolved_group_at(line, text)
-	local source = vim.fn.getline(line)
-	local column = source:find(text, 1, true)
-	if not column then
-		return ""
-	end
-	local syntax_id = vim.fn.synID(line, column, true)
-	return vim.fn.synIDattr(vim.fn.synIDtrans(syntax_id), "name")
-end
-
 local function expect_filetype(expected)
 	if vim.bo.filetype ~= expected then
 		table.insert(failures, string.format("filetype: expected %q, got %q", expected, vim.bo.filetype))
@@ -66,8 +56,9 @@ expect_group(12, "4E+2", "radianceCalNumber")
 expect_group(13, "ro", "radianceCalBuiltinVariable")
 expect_group(13, "ri", "radianceCalBuiltinFunction")
 
-if resolved_group_at(10, "sqrt") ~= "Function" then
-	table.insert(failures, "built-in functions do not resolve to the Function highlight group")
+local builtin_highlight = vim.fn.execute("highlight radianceCalBuiltinFunction")
+if not builtin_highlight:find("links to Function", 1, true) then
+	table.insert(failures, "built-in functions are not linked to the Function highlight group")
 end
 
 if #failures > 0 then
